@@ -11,47 +11,48 @@ Install this node module into your project.
 npm i test-runner-config --save-dev
 ```
 
-Require testRunnerConfig in your karma.conf.js or wallaby.conf.js file.
+Require testRunnerConfig in your karma.conf.js or wallaby.conf.js file and pass a structured file list to a `testRunnerConfig` method to get your configuration.
+
+The file list should have the following format. You can use glob patterns, but note that Wallaby does not support them all.
+See [Wallaby issue 69](https://github.com/wallabyjs/public/issues/69)
+
+```json
+[{
+  "type": "lib",
+  "files": ["node_modules/angular/angular.js"]
+},
+{
+  "type": "src",
+  "files": ["src/*.js"]
+},
+{
+  "type": "specs",
+  "files": ["test/specs/*.js"]
+}]
+```
 
 ```javascript
 var testRunnerConfig = require('testRunnerConfig');
-```
-
-Pass a file list to a testRunnerConfig method to get your configuration.
-
-```javascript
-var config = testRunnerConfig.getWallabyFiles(files); // For Karma call getKarmaFiles()
+var config = testRunnerConfig.getWallabyFiles(files); // For Karma config call getKarmaFiles()
 ```
 
 `config` contains the part of your Wallaby config with the files and specs, which you can merge into your Wallaby config object:
 
 ```javascript
 {
-  files: ...,
-  tests: ...
+  files: [
+    { pattern: 'node_modules/angular/angular.js', load: true, instrument: false, ignore: false },
+    { pattern: 'src/*.js', load: true, instrument: true, ignore: false }
+  ],
+  tests: [
+    { pattern: 'test/specs/*.js', load: true, instrument: true, ignore: false }
+  ]
 }
-```
-
-The file list should have the following format:
-
-```json
-[{
-  "type": "src",
-  "files": [
-    "src/*.js" // any glob pattern
-  ]
-},
-{
-  "type": "specs",
-  "files": [
-    "test/specs/*.js"
-  ]
-}]
 ```
 
 The arrays with file patterns will be mapped onto the new data structure using default mappings.
 You can override the mapping per type by passing a mapping object as second argument.
-The following example shows you the default mappings.
+The following example shows you the default mappings passed explicitely.
 
 ```javascript
 var config = testRunnerConfig.getWallabyFiles(files, {
