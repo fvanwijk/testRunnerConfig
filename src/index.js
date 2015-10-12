@@ -58,10 +58,19 @@ function getWallabyFiles(files, mappings) {
   };
 }
 
+function getKarmaFiles(files) {
+  return {
+    files: _(files)
+      .reject({ type: 'ignore' })
+      .pluck('files')
+      .values()
+      .flatten()
+      .value(),
+    exclude: _.result(_.findWhere(files, { type: 'ignore' }), 'files')
+  };
+}
+
 module.exports = {
   getWallabyFiles: getWallabyFiles,
-  getKarmaFiles: files => _(files)
-    .values()
-    .flatten()
-    .value
+  getKarmaFiles: getKarmaFiles
 };
