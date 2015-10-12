@@ -3,7 +3,7 @@
   "license": "MIT",
   "author": "Frank van Wijk <fvanwijk@xebia.com>",
   "description": "Utility to create a shared files config for Wallaby and Karma",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": [
     "karma",
     "wallaby",
@@ -13,7 +13,7 @@
     "runner"
   ],
   "files": [
-    "index.js"
+    "src"
   ],
   "main": [
     "index.js"

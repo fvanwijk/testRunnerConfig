@@ -32,7 +32,7 @@ See [Wallaby issue 69](https://github.com/wallabyjs/public/issues/69)
 ```
 
 ```javascript
-var testRunnerConfig = require('testRunnerConfig');
+var testRunnerConfig = require('test-runner-config');
 var config = testRunnerConfig.getWallabyFiles(files); // For Karma config call getKarmaFiles()
 ```
 
