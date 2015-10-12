@@ -15,9 +15,7 @@
   "files": [
     "src"
   ],
-  "main": [
-    "index.js"
-  ],
+  "main": "index.js",
   "repository": "fvanwijk/test-runner-config",
   "dependencies": {
     "lodash": "3.10.1"
