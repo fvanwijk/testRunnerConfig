@@ -50,9 +50,13 @@ function getWallabyFiles(files, mappings) {
   });
 
   // Add 'specs' list to files as 'ignored'. If we had added them manually to the ignore list, Karma has no specs to run.
-  var specs = _.findWhere(files, { type: 'specs' }).files;
   var ignoreIndex = _.findIndex(files, { type: 'ignore' });
-  files[ignoreIndex].files = files[ignoreIndex].files.concat(specs);
+  var specs = _.findWhere(files, { type: 'specs' }).files;
+  if (files[ignoreIndex]) {
+    files[ignoreIndex].files = files[ignoreIndex].files.concat(specs);
+  } else {
+    files.push({ type: 'ignore', files: specs });
+  }
 
   var wallabyFiles = files.map(applyMappings(mappings));
 
