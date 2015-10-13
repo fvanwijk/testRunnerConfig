@@ -90,7 +90,7 @@ function getKarmaFiles(files, mappings) {
       .values()
       .flatten()
       .value(),
-    exclude: _.result(_.findWhere(karmaFiles, { type: 'ignore' }), 'files')
+    exclude: _.result(_.findWhere(karmaFiles, { type: 'ignore' }), 'files', [])
   };
 }
 
