@@ -94,7 +94,12 @@ function getKarmaFiles(files, mappings) {
   };
 }
 
+function getMochaFiles(files, mappings) {
+  return getKarmaFiles(files, mappings).files;
+}
+
 module.exports = {
   getWallabyFiles: getWallabyFiles,
-  getKarmaFiles: getKarmaFiles
+  getKarmaFiles: getKarmaFiles,
+  getMochaFiles: getMochaFiles
 };
