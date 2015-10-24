@@ -4,10 +4,12 @@ module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
+  grunt.loadNpmTasks('grunt-simple-mocha');
 
   var appConfig = {
     src: 'src',
-    dist: 'dist'
+    dist: 'dist',
+    test: 'test'
   };
 
   grunt.initConfig({
@@ -43,6 +45,15 @@ module.exports = function (grunt) {
       }
     },
 
+    simplemocha: {
+      test: {
+        options: {
+          ui: 'bdd'
+        },
+        src: require('./src/').getMochaFiles(require('./test/testFiles.js'))
+      }
+    },
+
     bump: {
       options: {
         files: ['package.json'],
@@ -50,11 +61,9 @@ module.exports = function (grunt) {
         commitMessage: 'Bump version to v%VERSION%',
         push: false
       }
-    },
+    }
   });
 
-  grunt.registerTask('default', [
-    'jshint',
-    'jscs'
-  ]);
+  grunt.registerTask('test', ['simplemocha']);
+  grunt.registerTask('default', ['jshint', 'jscs']);
 };
