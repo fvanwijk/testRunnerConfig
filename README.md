@@ -1,7 +1,7 @@
 # Test Runner Config
 
-When you run your unit tests using both Karma and Wallaby, a lot of configuration such as the files list is duplicated.
-We like DRY, so put the files in a separate file list and load them into your Wallaby and Karma config using this script!
+When you run your unit tests using either Wallaby, Karma and Mocha, a lot of configuration such as the files list is duplicated.
+We like DRY, so put the files in a separate file list and load them into your Wallaby, Karma and/or Mocha config using this script!
 
 # Usage
 
