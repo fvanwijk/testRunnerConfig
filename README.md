@@ -12,6 +12,7 @@ npm i test-runner-config --save-dev
 ```
 
 Require testRunnerConfig in your karma.conf.js or wallaby.conf.js file and pass a structured file list to a `testRunnerConfig` method to get your configuration.
+Mocha is not supported because it passes the files as argument to the `mocha` command, but you can get a files list for the Grunt or Gulp task that runs Mocha.
 
 The file list should have the following format. You can use glob patterns, but note that Wallaby does not support them all.
 See [Wallaby issue 69](https://github.com/wallabyjs/public/issues/69)
@@ -33,10 +34,13 @@ See [Wallaby issue 69](https://github.com/wallabyjs/public/issues/69)
 
 ```javascript
 var testRunnerConfig = require('test-runner-config');
-var config = testRunnerConfig.getWallabyFiles(files); // For Karma config call getKarmaFiles()
+var config = testRunnerConfig.getWallabyFiles(files); // For Karma config call getKarmaFiles() and for Mocha call getMochaFiles()
 ```
 
-`config` contains the part of your Wallaby config with the files and specs, which you can merge into your Wallaby config object:
+`config` contains the part of your Wallaby config with the files and specs, which you can merge into your Wallaby config object.
+To get the files array for the Mocha grunt or Gulp task, call `testRunnerConfig.getMochaFiles(require('./test/testFiles.js'))`.
+
+This is now in the `config` variable.
 
 ```javascript
 {
