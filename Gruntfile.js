@@ -41,7 +41,16 @@ module.exports = function (grunt) {
       src: {
         src: ['<%= paths.src %>/scripts/**/*.js']
       }
-    }
+    },
+
+    bump: {
+      options: {
+        files: ['package.json'],
+        commitFiles: ['package.json'],
+        commitMessage: 'Bump version to v%VERSION%',
+        push: false
+      }
+    },
   });
 
   grunt.registerTask('default', [
