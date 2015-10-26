@@ -25,6 +25,15 @@ function applyMappings(mappings) {
   }
 }
 
+function getFilesList(files, typeToExclude, isExclude) {
+  return _(files)
+    [isExclude ? 'where' : 'reject']({ type: typeToExclude })
+    .pluck('files')
+    .values()
+    .flatten()
+    .value();
+}
+
 function getWallabyFiles(files, mappings) {
   mappings = _.defaults(mappings || {}, {
     config: notInstrument,
@@ -61,13 +70,8 @@ function getWallabyFiles(files, mappings) {
   var wallabyFiles = files.map(applyMappings(mappings));
 
   return {
-    files: _(wallabyFiles)
-      .reject({ type: 'specs' })
-      .pluck('files')
-      .values()
-      .flatten()
-      .value(),
-    tests: _.result(_.findWhere(wallabyFiles, { type: 'specs' }), 'files')
+    files: getFilesList(wallabyFiles, 'specs', false),
+    tests: getFilesList(wallabyFiles, 'specs', true)
   };
 }
 
@@ -84,13 +88,8 @@ function getKarmaFiles(files, mappings) {
   var karmaFiles = files.map(applyMappings(mappings));
 
   return {
-    files: _(karmaFiles)
-      .reject({ type: 'ignore' })
-      .pluck('files')
-      .values()
-      .flatten()
-      .value(),
-    exclude: _.result(_.findWhere(karmaFiles, { type: 'ignore' }), 'files', [])
+    files: getFilesList(wallabyFiles, 'ignore', false),
+    exclude: getFilesList(wallabyFiles, 'ignore', true)
   };
 }
 
