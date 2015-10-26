@@ -35,6 +35,10 @@ function getFilesList(files, typeToExclude, isExclude) {
 }
 
 function getWallabyFiles(files, mappings) {
+  if (!files) {
+    return {};
+  }
+
   mappings = _.defaults(mappings || {}, {
     config: notInstrument,
     ignore: function (file) {
@@ -76,6 +80,10 @@ function getWallabyFiles(files, mappings) {
 }
 
 function getKarmaFiles(files, mappings) {
+  if (!files) {
+    return {};
+  }
+
   mappings = _.defaults(mappings || {}, {
     mock: function (file) {
       return {
