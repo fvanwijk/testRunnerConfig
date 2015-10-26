@@ -88,8 +88,8 @@ function getKarmaFiles(files, mappings) {
   var karmaFiles = files.map(applyMappings(mappings));
 
   return {
-    files: getFilesList(wallabyFiles, 'ignore', false),
-    exclude: getFilesList(wallabyFiles, 'ignore', true)
+    files: getFilesList(karmaFiles, 'ignore', false),
+    exclude: getFilesList(karmaFiles, 'ignore', true)
   };
 }
 
