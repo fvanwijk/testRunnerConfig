@@ -15,7 +15,8 @@ Require testRunnerConfig in your karma.conf.js or wallaby.conf.js file and pass 
 Mocha is not supported because it passes the files as argument to the `mocha` command, but you can get a files list for the Grunt or Gulp task that runs Mocha.
 
 The file list should have the following format. You can use glob patterns, but note that Wallaby does not support them all.
-See [Wallaby issue 69](https://github.com/wallabyjs/public/issues/69)
+See [Wallaby issue 69](https://github.com/wallabyjs/public/issues/69).
+You can use any type, however 'specs' and 'ignore' are special types that are mapped onto the correct output properties.
 
 ```json
 [{
