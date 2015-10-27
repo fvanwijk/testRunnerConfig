@@ -1,5 +1,7 @@
 'use strict';
 
+var testFiles = require('./src/').getMochaFiles(require('./test/testFiles.js'));
+
 module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt);
@@ -41,7 +43,13 @@ module.exports = function (grunt) {
         config: './.jscsrc'
       },
       src: {
-        src: ['<%= paths.src %>/scripts/**/*.js']
+        src: ['<%= paths.src %>/**/*.js']
+      },
+      test: {
+        src: testFiles
+      },
+      config: {
+        src: '*.js'
       }
     },
 
@@ -52,13 +60,15 @@ module.exports = function (grunt) {
         options: {
           require: 'babel/register'
         },
-        src: require('./src/').getMochaFiles(require('./test/testFiles.js'))
+        src: testFiles
       }
     },
 
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+    // jshint camelcase: false
     mocha_istanbul: {
       coverage: {
-        src: require('./src/').getMochaFiles(require('./test/testFiles.js')),
+        src: testFiles,
         options: {
           coverageFolder: 'test/coverage',
           mochaOptions: ['--require=babel/register'],

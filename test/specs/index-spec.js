@@ -9,7 +9,7 @@ var p = (pattern, instrument, load, ignore) => ({
   ignore: ignore
 });
 
-describe('the getKarmaFiles() method', function() {
+describe('the getKarmaFiles() method', function () {
   var getFiles;
 
   beforeEach(function () {
@@ -185,7 +185,7 @@ describe('the getWallabyFiles method', function () {
         src: createFakeMapping('src')
       })).to.eql({
           // Format: ['used mapping fn', 'filename']
-          files: [['config', 'configfile'], ['ignore', 'ignorefile'], [ 'ignore', 'specfile'], ['lib', 'libfile'], ['mock', 'mockfile'], ['src', 'srcfile']],
+          files: [['config', 'configfile'], ['ignore', 'ignorefile'], ['ignore', 'specfile'], ['lib', 'libfile'], ['mock', 'mockfile'], ['src', 'srcfile']],
           tests: [['specs', 'specfile']]
         });
     });
