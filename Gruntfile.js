@@ -4,7 +4,6 @@ module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
-  grunt.loadNpmTasks('grunt-simple-mocha');
 
   var appConfig = {
     src: 'src',
@@ -45,10 +44,13 @@ module.exports = function (grunt) {
       }
     },
 
-    simplemocha: {
+    mochaTest: {
+      // Run without Grunt:
+      // mocha test/specs --require babel/register
       test: {
         options: {
-          ui: 'bdd'
+          ui: 'bdd',
+          require: 'babel/register'
         },
         src: require('./src/').getMochaFiles(require('./test/testFiles.js'))
       }
@@ -64,6 +66,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('test', ['simplemocha']);
-  grunt.registerTask('default', ['jshint', 'jscs']);
+  grunt.registerTask('test', ['mochaTest']);
+  grunt.registerTask('default', ['jshint', 'jscs', 'test']);
 };

@@ -22,7 +22,7 @@ function applyMappings(mappings) {
       type: group.type,
       files: group.files.map(mappings[group.type] || _.identity)
     };
-  }
+  };
 }
 
 function getFilesList(files, typeToExclude, isExclude) {
