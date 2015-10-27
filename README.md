@@ -1,5 +1,10 @@
 # Test Runner Config
 
+[![Build Status](https://travis-ci.org/fvanwijk/testRunnerConfig.svg?branch=master)](https://travis-ci.org/fvanwijk/testRunnerConfig)
+[![Test Coverage](https://codeclimate.com/github/fvanwijk/testRunnerConfig/badges/coverage.svg)](https://codeclimate.com/github/fvanwijk/testRunnerConfig)
+[![Code Climate](https://codeclimate.com/github/fvanwijk/testRunnerConfig/badges/gpa.svg)](https://codeclimate.com/github/fvanwijk/testRunnerConfig)
+[![devDependency Status](https://david-dm.org/fvanwijk/testRunnerConfig/dev-status.svg)](https://david-dm.org/fvanwijk/testRunnerConfig#info=devDependencies)
+
 When you run your unit tests using either Wallaby, Karma and Mocha, a lot of configuration such as the files list is duplicated.
 We like DRY, so put the files in a separate file list and load them into your Wallaby, Karma and/or Mocha config using this script!
 

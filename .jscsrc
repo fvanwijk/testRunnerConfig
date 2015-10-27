@@ -13,7 +13,7 @@
     "disallowSpacesInsideArrayBrackets": true,
     "disallowTrailingComma": true,
     "disallowTrailingWhitespace": true,
-    "validateJSDoc": { "checkParamNames": true, "checkRedundantParams": true, "requireParamTypes": true },
+    "jsDoc": { "checkParamNames": true, "checkRedundantParams": true, "requireParamTypes": true },
     "requireCamelCaseOrUpperCaseIdentifiers": true,
     "requireCapitalizedConstructors": true,
     "requireCurlyBraces": ["if", "else", "for", "while", "do", "try", "catch"],

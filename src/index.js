@@ -22,7 +22,7 @@ function applyMappings(mappings) {
       type: group.type,
       files: group.files.map(mappings[group.type] || _.identity)
     };
-  }
+  };
 }
 
 function getFilesList(files, typeToExclude, isExclude) {
@@ -35,6 +35,10 @@ function getFilesList(files, typeToExclude, isExclude) {
 }
 
 function getWallabyFiles(files, mappings) {
+  if (!files) {
+    return {};
+  }
+
   mappings = _.defaults(mappings || {}, {
     config: notInstrument,
     ignore: function (file) {
@@ -60,7 +64,7 @@ function getWallabyFiles(files, mappings) {
 
   // Add 'specs' list to files as 'ignored'. If we had added them manually to the ignore list, Karma has no specs to run.
   var ignoreIndex = _.findIndex(files, { type: 'ignore' });
-  var specs = _.findWhere(files, { type: 'specs' }).files;
+  var specs = _.result(_.findWhere(files, { type: 'specs' }), 'files', []);
   if (files[ignoreIndex]) {
     files[ignoreIndex].files = files[ignoreIndex].files.concat(specs);
   } else {
@@ -76,6 +80,10 @@ function getWallabyFiles(files, mappings) {
 }
 
 function getKarmaFiles(files, mappings) {
+  if (!files) {
+    return {};
+  }
+
   mappings = _.defaults(mappings || {}, {
     mock: function (file) {
       return {
