@@ -31,10 +31,13 @@ module.exports = function (grunt) {
         reporter: require('jshint-stylish')
       },
       src: {
-        src: [
-          'Gruntfile.js',
-          '<%= paths.src %>/**/*.js'
-        ]
+        src: '<%= paths.src %>/**/*.js'
+      },
+      test: {
+        src: testFiles
+      },
+      config: {
+        src: '*.js'
       }
     },
 
@@ -43,7 +46,7 @@ module.exports = function (grunt) {
         config: './.jscsrc'
       },
       src: {
-        src: ['<%= paths.src %>/**/*.js']
+        src: '<%= paths.src %>/**/*.js'
       },
       test: {
         src: testFiles

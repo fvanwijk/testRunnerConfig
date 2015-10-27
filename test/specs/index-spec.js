@@ -24,7 +24,7 @@ describe('the getKarmaFiles() method', function () {
     expect(getFiles([])).to.eql({
       files: [],
       exclude: []
-    })
+    });
   });
 
   describe('the default pattern mappings', function () {
@@ -92,7 +92,7 @@ describe('the getWallabyFiles method', function () {
     expect(getFiles([])).to.eql({
       files: [],
       tests: []
-    })
+    });
   });
 
   describe('the default pattern mappings', function () {
