@@ -4,6 +4,7 @@ module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
+  grunt.loadNpmTasks('grunt-mocha-istanbul');
 
   var appConfig = {
     src: 'src',
@@ -49,10 +50,25 @@ module.exports = function (grunt) {
       // mocha test/specs --require babel/register
       test: {
         options: {
-          ui: 'bdd',
           require: 'babel/register'
         },
         src: require('./src/').getMochaFiles(require('./test/testFiles.js'))
+      }
+    },
+
+    mocha_istanbul: {
+      coverage: {
+        src: require('./src/').getMochaFiles(require('./test/testFiles.js')),
+        options: {
+          coverageFolder: 'test/coverage',
+          mochaOptions: ['--require=babel/register'],
+          check: {
+            lines: 100,
+            statements: 100,
+            branches: 100,
+            functions: 100
+          }
+        }
       }
     },
 
@@ -66,6 +82,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('test', ['mochaTest']);
+  grunt.registerTask('test', ['mocha_istanbul']);
   grunt.registerTask('default', ['jshint', 'jscs', 'test']);
 };
