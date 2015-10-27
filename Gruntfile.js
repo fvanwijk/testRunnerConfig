@@ -7,6 +7,7 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
   grunt.loadNpmTasks('grunt-mocha-istanbul');
+  grunt.task.renameTask('mocha_istanbul', 'mochaIstanbul');
 
   var appConfig = {
     src: 'src',
@@ -67,9 +68,7 @@ module.exports = function (grunt) {
       }
     },
 
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    // jshint camelcase: false
-    mocha_istanbul: {
+    mochaIstanbul: {
       coverage: {
         src: testFiles,
         options: {
@@ -95,6 +94,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('test', ['mocha_istanbul']);
+  grunt.registerTask('test', ['mochaIstanbul']);
   grunt.registerTask('default', ['jshint', 'jscs', 'test']);
 };
