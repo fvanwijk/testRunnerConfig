@@ -1,35 +1,33 @@
-var expect = require('chai').expect;
-var testRunnerConfig = require('../../src/');
+'use strict';
+
+const expect = require('chai').expect;
+const testRunnerConfig = require('../../src/');
 
 // Create pattern object
-var p = (pattern, instrument, load, ignore) => ({
+let p = (pattern, instrument, load, ignore) => ({
   pattern: pattern,
   instrument: instrument,
   load: load,
   ignore: ignore
 });
 
-describe('the getKarmaFiles() method', function () {
-  var getFiles;
+describe('the getKarmaFiles() method', () => {
+  let getFiles = testRunnerConfig.getKarmaFiles;
 
-  beforeEach(function () {
-    getFiles = testRunnerConfig.getKarmaFiles;
-  });
-
-  it('should return {} when passing nothing', function () {
+  it('should return {} when passing nothing', () => {
     expect(getFiles()).to.eql({});
   });
 
-  it('should return empty files / exclude list when passing no files or ignores', function () {
+  it('should return empty files / exclude list when passing no files or ignores', () => {
     expect(getFiles([])).to.eql({
       files: [],
       exclude: []
     });
   });
 
-  describe('the default pattern mappings', function () {
+  describe('the default pattern mappings', () => {
     // There are currently no pattern mappings for all types except mock in karma
-    it('should map files of type x to "files", and files of type ignore to "exclude", without pattern object', function () {
+    it('should map files of type x to "files", and files of type ignore to "exclude", without pattern object', () => {
       expect(getFiles([
         { type: 'x', files: ['xfile'] },
         { type: 'z', files: ['yfile'] },
@@ -40,7 +38,7 @@ describe('the getKarmaFiles() method', function () {
       });
     });
 
-    it('should map files of type mock to a pattern that is not included', function () {
+    it('should map files of type mock to a pattern that is not included', () => {
       expect(getFiles([{ type: 'mock', files: ['mockfile'] }])).to.eql({
         files: [{ pattern: 'mockfile', included: false }],
         exclude: []
@@ -48,7 +46,7 @@ describe('the getKarmaFiles() method', function () {
     });
   });
 
-  it('should merge multiple file lists that have type ignore', function () {
+  it('should merge multiple file lists that have type ignore', () => {
     expect(getFiles([
       { type: 'ignore', files: ['ignore1'] },
       { type: 'ignore', files: ['ignore2'] }
@@ -59,17 +57,17 @@ describe('the getKarmaFiles() method', function () {
   });
 });
 
-describe('the getMochaFiles method', function () {
-  it('should return undefined when passing nothing', function () {
+describe('the getMochaFiles method', () => {
+  it('should return undefined when passing nothing', () => {
     expect(testRunnerConfig.getMochaFiles()).to.eql(undefined);
   });
 
-  it('should return empty array when passing empty file list', function () {
+  it('should return empty array when passing empty file list', () => {
     expect(testRunnerConfig.getMochaFiles([])).to.eql([]);
   });
 
-  describe('the default pattern mappings', function () {
-    it('should return the files list for the getKarmaFiles result', function () {
+  describe('the default pattern mappings', () => {
+    it('should return the files list for the getKarmaFiles result', () => {
       expect(testRunnerConfig.getMochaFiles([
         { type: 'x', files: ['xfile'] },
         { type: 'z', files: ['yfile'] },
@@ -81,22 +79,22 @@ describe('the getMochaFiles method', function () {
   });
 });
 
-describe('the getWallabyFiles method', function () {
-  var getFiles = testRunnerConfig.getWallabyFiles;
+describe('the getWallabyFiles method', () => {
+  let getFiles = testRunnerConfig.getWallabyFiles;
 
-  it('should return {} when passing nothing', function () {
+  it('should return {} when passing nothing', () => {
     expect(getFiles()).to.eql({});
   });
 
-  it('should return empty files / exclude list when passing no files or ignores', function () {
+  it('should return empty files / exclude list when passing no files or ignores', () => {
     expect(getFiles([])).to.eql({
       files: [],
       tests: []
     });
   });
 
-  describe('the default pattern mappings', function () {
-    it('should map files of type config to "files" with pattern instrument: false, load: true, ignore: false', function () {
+  describe('the default pattern mappings', () => {
+    it('should map files of type config to "files" with pattern instrument: false, load: true, ignore: false', () => {
       expect(getFiles([
         { type: 'config', files: ['configfile'] }
       ])).to.eql({
@@ -105,7 +103,7 @@ describe('the getWallabyFiles method', function () {
         });
     });
 
-    it('should map files of type ignore to "files" with pattern ignore: true', function () {
+    it('should map files of type ignore to "files" with pattern ignore: true', () => {
       expect(getFiles([
         { type: 'ignore', files: ['ignorefile'] }
       ])).to.eql({
@@ -114,7 +112,7 @@ describe('the getWallabyFiles method', function () {
       });
     });
 
-    it('should map files of type lib to "files" with pattern instrument: false, load: true, ignore: false', function () {
+    it('should map files of type lib to "files" with pattern instrument: false, load: true, ignore: false', () => {
       expect(getFiles([
         { type: 'lib', files: ['libfile'] }
       ])).to.eql({
@@ -123,7 +121,7 @@ describe('the getWallabyFiles method', function () {
       });
     });
 
-    it('should map files of type mock to "files" with pattern instrument: false, load: false, ignore: false', function () {
+    it('should map files of type mock to "files" with pattern instrument: false, load: false, ignore: false', () => {
       expect(getFiles([
         { type: 'mock', files: ['mockfile'] }
       ])).to.eql({
@@ -132,7 +130,7 @@ describe('the getWallabyFiles method', function () {
       });
     });
 
-    it('should map files of type spec to "specs" with pattern instrument: false, load: false, ignore: false and is ignored in the files list', function () {
+    it('should map files of type spec to "specs" with pattern instrument: false, load: false, ignore: false and is ignored in the files list', () => {
       expect(getFiles([
         { type: 'specs', files: ['specfile'] }
       ])).to.eql({
@@ -141,7 +139,7 @@ describe('the getWallabyFiles method', function () {
       });
     });
 
-    it('should add specs to the ignore list also when there are already files defined in that list', function () {
+    it('should add specs to the ignore list also when there are already files defined in that list', () => {
       expect(getFiles([
         { type: 'src', files: ['srcfile'] },
         { type: 'specs', files: ['specfile'] }
@@ -154,7 +152,7 @@ describe('the getWallabyFiles method', function () {
         });
     });
 
-    it('should map files of type src to "files" with pattern instrument: true, load: true, ignore: false', function () {
+    it('should map files of type src to "files" with pattern instrument: true, load: true, ignore: false', () => {
       expect(getFiles([
         { type: 'src', files: ['srcfile'] }
       ])).to.eql({
@@ -164,9 +162,9 @@ describe('the getWallabyFiles method', function () {
     });
   });
 
-  describe('overriding pattern mappings', function () {
-    it('should override all pattern mappings when passed', function () {
-      var createFakeMapping = (mappingName) =>
+  describe('overriding pattern mappings', () => {
+    it('should override all pattern mappings when passed', () => {
+      let createFakeMapping = (mappingName) =>
         (x) => [mappingName, x];
 
       expect(getFiles([
