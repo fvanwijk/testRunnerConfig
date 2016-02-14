@@ -49,7 +49,10 @@ module.exports = function (grunt) {
         src: testFiles,
         options: {
           coverageFolder: paths.test + '/coverage',
-          mochaOptions: ['--require=babel-register'],
+          //mochaOptions: ['--require=babel-register'],
+          //mochaOptions: ['--require=babel-core/register'],
+          //mochaOptions: ['--compilers=js:babel-register'],
+          //mochaOptions: ['--compilers=js:babel-core/register'],
           check: {
             lines: 100,
             statements: 100,
@@ -64,7 +67,7 @@ module.exports = function (grunt) {
       // mocha test/specs --require babel-register
       test: {
         options: {
-          require: 'babel-register'
+          //require: 'babel-register'
         },
         src: testFiles
       }
