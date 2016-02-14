@@ -27,8 +27,8 @@ function applyMappings(mappings) {
 
 function getFilesList(files, typeToExclude, isExclude) {
   return _(files)
-    [isExclude ? 'where' : 'reject']({ type: typeToExclude })
-    .pluck('files')
+    [isExclude ? 'filter' : 'reject']({ type: typeToExclude })
+    .map('files')
     .values()
     .flatten()
     .value();
@@ -64,7 +64,7 @@ function getWallabyFiles(files, mappings) {
 
   // Add 'specs' list to files as 'ignored'. If we had added them manually to the ignore list, Karma has no specs to run.
   var ignoreIndex = _.findIndex(files, { type: 'ignore' });
-  var specs = _.result(_.findWhere(files, { type: 'specs' }), 'files', []);
+  var specs = _.result(_.find(files, { type: 'specs' }), 'files', []);
   if (files[ignoreIndex]) {
     files[ignoreIndex].files = files[ignoreIndex].files.concat(specs);
   } else {
