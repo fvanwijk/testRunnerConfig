@@ -1,5 +1,7 @@
-var _ = require('lodash');
-var instrument = function (file) {
+'use strict';
+
+const _ = require('lodash');
+let instrument = function (file) {
   return {
     pattern: file,
     instrument: true,
@@ -7,7 +9,7 @@ var instrument = function (file) {
     ignore: false
   };
 };
-var notInstrument = function (file) {
+let notInstrument = function (file) {
   return {
     pattern: file,
     instrument: false,
@@ -17,12 +19,10 @@ var notInstrument = function (file) {
 };
 
 function applyMappings(mappings) {
-  return function (group) {
-    return {
-      type: group.type,
-      files: group.files.map(mappings[group.type] || _.identity)
-    };
-  };
+  return (group) => ({
+    type: group.type,
+    files: group.files.map(mappings[group.type] || _.identity)
+  });
 }
 
 function getFilesList(files, typeToExclude, isExclude) {
@@ -63,15 +63,15 @@ function getWallabyFiles(files, mappings) {
   });
 
   // Add 'specs' list to files as 'ignored'. If we had added them manually to the ignore list, Karma has no specs to run.
-  var ignoreIndex = _.findIndex(files, { type: 'ignore' });
-  var specs = _.result(_.find(files, { type: 'specs' }), 'files', []);
+  let ignoreIndex = _.findIndex(files, { type: 'ignore' });
+  let specs = _.result(_.find(files, { type: 'specs' }), 'files', []);
   if (files[ignoreIndex]) {
     files[ignoreIndex].files = files[ignoreIndex].files.concat(specs);
   } else {
     files.push({ type: 'ignore', files: specs });
   }
 
-  var wallabyFiles = files.map(applyMappings(mappings));
+  let wallabyFiles = files.map(applyMappings(mappings));
 
   return {
     files: getFilesList(wallabyFiles, 'specs', false),
@@ -85,15 +85,13 @@ function getKarmaFiles(files, mappings) {
   }
 
   mappings = _.defaults(mappings || {}, {
-    mock: function (file) {
-      return {
-        pattern: file,
-        included: false
-      };
-    }
+    mock: (file) => ({
+      pattern: file,
+      included: false
+    })
   });
 
-  var karmaFiles = files.map(applyMappings(mappings));
+  let karmaFiles = files.map(applyMappings(mappings));
 
   return {
     files: getFilesList(karmaFiles, 'ignore', false),
