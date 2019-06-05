@@ -1,6 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
 let instrument = function (file) {
   return {
     pattern: file,
@@ -9,6 +8,7 @@ let instrument = function (file) {
     ignore: false
   };
 };
+
 let notInstrument = function (file) {
   return {
     pattern: file,
@@ -21,17 +21,17 @@ let notInstrument = function (file) {
 function applyMappings(mappings) {
   return (group) => ({
     type: group.type,
-    files: group.files.map(mappings[group.type] || _.identity)
+    files: group.files.map(mappings[group.type] || ((file) => file))
   });
 }
 
+let flatten = (array) => [].concat(...array);
+let values = (array) => Array.from(array).values();
+
 function getFilesList(files, typeToExclude, isExclude) {
-  return _(files)
-    [isExclude ? 'filter' : 'reject']({ type: typeToExclude })
-    .map('files')
-    .values()
-    .flatten()
-    .value();
+  return flatten(values(files
+    .filter((file) => isExclude ? file.type === typeToExclude : file.type !== typeToExclude)
+    .map((file) => file.files)));
 }
 
 function getWallabyFiles(files, mappings) {
@@ -39,7 +39,7 @@ function getWallabyFiles(files, mappings) {
     return {};
   }
 
-  mappings = _.defaults(mappings || {}, {
+  mappings = Object.assign({
     config: notInstrument,
     ignore: function (file) {
       return {
@@ -60,11 +60,13 @@ function getWallabyFiles(files, mappings) {
     },
     specs: instrument,
     src: instrument
-  });
+  }, mappings);
 
   // Add 'specs' list to files as 'ignored'. If we had added them manually to the ignore list, Karma has no specs to run.
-  let ignoreIndex = _.findIndex(files, { type: 'ignore' });
-  let specs = _.result(_.find(files, { type: 'specs' }), 'files', []);
+  let ignoreIndex = files.findIndex((file) => file.type === 'ignore');
+  let specs = files.find((file) => file.type === 'specs');
+  specs = specs ? specs.files : [];
+
   if (files[ignoreIndex]) {
     files[ignoreIndex].files = files[ignoreIndex].files.concat(specs);
   } else {
@@ -84,12 +86,12 @@ function getKarmaFiles(files, mappings) {
     return {};
   }
 
-  mappings = _.defaults(mappings || {}, {
+  mappings = Object.assign({
     mock: (file) => ({
       pattern: file,
       included: false
     })
-  });
+  }, mappings);
 
   let karmaFiles = files.map(applyMappings(mappings));
 
