@@ -5,8 +5,6 @@ var testFiles = require('./src/').getMochaFiles(require('./test/testFiles.js'));
 module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt);
-  grunt.loadNpmTasks('grunt-mocha-istanbul');
-  grunt.task.renameTask('mocha_istanbul', 'mochaIstanbul');
 
   var paths = {
     src: 'src',
@@ -44,24 +42,6 @@ module.exports = function (grunt) {
         src: '*.js'
       }
     },
-    mochaIstanbul: {
-      coverage: {
-        src: testFiles,
-        options: {
-          coverageFolder: paths.test + '/coverage',
-          //mochaOptions: ['--require=babel-register'],
-          //mochaOptions: ['--require=babel-core/register'],
-          //mochaOptions: ['--compilers=js:babel-register'],
-          //mochaOptions: ['--compilers=js:babel-core/register'],
-          check: {
-            lines: 100,
-            statements: 100,
-            branches: 100,
-            functions: 100
-          }
-        }
-      }
-    },
     mochaTest: {
       // Run without Grunt:
       // mocha test/specs --require babel-register
@@ -74,6 +54,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('test', ['mochaIstanbul']);
+  grunt.registerTask('test', ['mochaTest']);
   grunt.registerTask('default', ['jshint', 'jscs', 'test']);
 };
