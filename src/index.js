@@ -1,107 +1,78 @@
 'use strict';
 
-const _ = require('lodash');
-let instrument = function (file) {
-  return {
-    pattern: file,
-    instrument: true,
-    load: true,
-    ignore: false
-  };
+const wallabyObject = (instrument, load, ignore) => (file) => ({
+  pattern: file,
+  instrument: instrument,
+  load: load,
+  ignore: ignore
+});
+
+const instrument = wallabyObject(true, true, false);
+const notInstrument = wallabyObject(false, true, false);
+
+const applyMappings = (mappings) => (group) => ({
+  type: group.type,
+  files: group.files.map(mappings[group.type] || ((file) => file))
+});
+
+const getFilesList = (files, typeToExclude, isExclude) => {
+  return [].concat(...files
+    .filter((file) => isExclude ? file.type === typeToExclude : file.type !== typeToExclude)
+    .map((file) => file.files));
 };
-let notInstrument = function (file) {
-  return {
-    pattern: file,
-    instrument: false,
-    load: true,
-    ignore: false
-  };
-};
 
-function applyMappings(mappings) {
-  return (group) => ({
-    type: group.type,
-    files: group.files.map(mappings[group.type] || _.identity)
-  });
-}
-
-function getFilesList(files, typeToExclude, isExclude) {
-  return _(files)
-    [isExclude ? 'filter' : 'reject']({ type: typeToExclude })
-    .map('files')
-    .values()
-    .flatten()
-    .value();
-}
-
-function getWallabyFiles(files, mappings) {
+const getWallabyFiles = (files, mappings) => {
   if (!files) {
     return {};
   }
 
-  mappings = _.defaults(mappings || {}, {
-    config: notInstrument,
-    ignore: function (file) {
-      return {
-        pattern: file,
-        instrument: false,
-        load: false,
-        ignore: true
-      };
-    },
-    lib: notInstrument,
-    mock: function (file) {
-      return {
-        pattern: file,
-        instrument: false,
-        load: false,
-        ignore: false
-      };
-    },
-    specs: instrument,
-    src: instrument
-  });
-
   // Add 'specs' list to files as 'ignored'. If we had added them manually to the ignore list, Karma has no specs to run.
-  let ignoreIndex = _.findIndex(files, { type: 'ignore' });
-  let specs = _.result(_.find(files, { type: 'specs' }), 'files', []);
+  let ignoreIndex = files.findIndex((file) => file.type === 'ignore');
+  let specs = files.find((file) => file.type === 'specs');
+  specs = specs ? specs.files : [];
+
   if (files[ignoreIndex]) {
     files[ignoreIndex].files = files[ignoreIndex].files.concat(specs);
   } else {
     files.push({ type: 'ignore', files: specs });
   }
 
-  let wallabyFiles = files.map(applyMappings(mappings));
+  let wallabyFiles = files.map(applyMappings({
+    config: notInstrument,
+    ignore: wallabyObject(false, false, true),
+    lib: notInstrument,
+    mock: wallabyObject(false, false, false),
+    specs: instrument,
+    src: instrument,
+    ...mappings }));
 
   return {
     files: getFilesList(wallabyFiles, 'specs', false),
     tests: getFilesList(wallabyFiles, 'specs', true)
   };
-}
+};
 
-function getKarmaFiles(files, mappings) {
+const getKarmaFiles = (files, mappings) => {
   if (!files) {
     return {};
   }
 
-  mappings = _.defaults(mappings || {}, {
+  let karmaFiles = files.map(applyMappings({
     mock: (file) => ({
       pattern: file,
       included: false
-    })
-  });
-
-  let karmaFiles = files.map(applyMappings(mappings));
+    }),
+    ...mappings }));
 
   return {
     files: getFilesList(karmaFiles, 'ignore', false),
     exclude: getFilesList(karmaFiles, 'ignore', true)
   };
-}
+};
 
-function getMochaFiles(files, mappings) {
+const getMochaFiles = (files, mappings) => {
   return getKarmaFiles(files, mappings).files;
-}
+};
 
 module.exports = {
   getWallabyFiles: getWallabyFiles,
