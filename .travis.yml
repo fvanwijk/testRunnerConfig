@@ -3,6 +3,11 @@ node_js:
   - '12'
   - '10'
   - '8'
-before_install: npm install -g grunt-cli
-before_script: npm install -g codeclimate-test-reporter
-after_script: codeclimate-test-reporter < test/coverage/lcov.info
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 --output cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script:
+  - npm run qa
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
