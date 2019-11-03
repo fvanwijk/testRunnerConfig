@@ -1,6 +1,6 @@
 'use strict';
 
-const wallabyObject = (instrument, load, ignore) => (file) => ({
+const wallabyObject = (instrument, load, ignore) => file => ({
   pattern: file,
   instrument: instrument,
   load: load,
@@ -10,15 +10,19 @@ const wallabyObject = (instrument, load, ignore) => (file) => ({
 const instrument = wallabyObject(true, true, false);
 const notInstrument = wallabyObject(false, true, false);
 
-const applyMappings = (mappings) => (group) => ({
+const applyMappings = mappings => group => ({
   type: group.type,
-  files: group.files.map(mappings[group.type] || ((file) => file))
+  files: group.files.map(mappings[group.type] || (file => file))
 });
 
 const getFilesList = (files, typeToExclude, isExclude) => {
-  return [].concat(...files
-    .filter((file) => isExclude ? file.type === typeToExclude : file.type !== typeToExclude)
-    .map((file) => file.files));
+  return [].concat(
+    ...files
+      .filter(file =>
+        isExclude ? file.type === typeToExclude : file.type !== typeToExclude
+      )
+      .map(file => file.files)
+  );
 };
 
 const getWallabyFiles = (files, mappings) => {
@@ -27,8 +31,8 @@ const getWallabyFiles = (files, mappings) => {
   }
 
   // Add 'specs' list to files as 'ignored'. If we had added them manually to the ignore list, Karma has no specs to run.
-  let ignoreIndex = files.findIndex((file) => file.type === 'ignore');
-  let specs = files.find((file) => file.type === 'specs');
+  let ignoreIndex = files.findIndex(file => file.type === 'ignore');
+  let specs = files.find(file => file.type === 'specs');
   specs = specs ? specs.files : [];
 
   if (files[ignoreIndex]) {
@@ -37,14 +41,17 @@ const getWallabyFiles = (files, mappings) => {
     files.push({ type: 'ignore', files: specs });
   }
 
-  let wallabyFiles = files.map(applyMappings({
-    config: notInstrument,
-    ignore: wallabyObject(false, false, true),
-    lib: notInstrument,
-    mock: wallabyObject(false, false, false),
-    specs: instrument,
-    src: instrument,
-    ...mappings }));
+  let wallabyFiles = files.map(
+    applyMappings({
+      config: notInstrument,
+      ignore: wallabyObject(false, false, true),
+      lib: notInstrument,
+      mock: wallabyObject(false, false, false),
+      specs: instrument,
+      src: instrument,
+      ...mappings
+    })
+  );
 
   return {
     files: getFilesList(wallabyFiles, 'specs', false),
@@ -57,12 +64,15 @@ const getKarmaFiles = (files, mappings) => {
     return {};
   }
 
-  let karmaFiles = files.map(applyMappings({
-    mock: (file) => ({
-      pattern: file,
-      included: false
-    }),
-    ...mappings }));
+  let karmaFiles = files.map(
+    applyMappings({
+      mock: file => ({
+        pattern: file,
+        included: false
+      }),
+      ...mappings
+    })
+  );
 
   return {
     files: getFilesList(karmaFiles, 'ignore', false),

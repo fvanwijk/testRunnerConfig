@@ -1,14 +1,10 @@
 module.exports = [
   {
     type: 'src',
-    files: [
-      'src/index.js'
-    ]
+    files: ['src/index.js']
   },
   {
     type: 'specs',
-    files: [
-      'test/specs/**/*.js'
-    ]
+    files: ['test/specs/**/*.js']
   }
 ];
