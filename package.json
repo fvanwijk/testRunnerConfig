@@ -3,7 +3,7 @@
   "license": "MIT",
   "author": "Frank van Wijk <fvanwijk@xebia.com>",
   "description": "Utility to create a shared files config for Wallaby, Karma and Mocha",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "keywords": [
     "karma",
     "wallaby",
