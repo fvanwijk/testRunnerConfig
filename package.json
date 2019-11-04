@@ -17,7 +17,10 @@
   ],
   "main": "src/index.js",
   "repository": "fvanwijk/testRunnerConfig",
+  "dependencies": {},
   "devDependencies": {
+    "@babel/core": "7.6.4",
+    "@babel/preset-env": "7.6.3",
     "chai": "4.2.0",
     "eslint": "6.6.0",
     "eslint-config-prettier": "6.5.0",
@@ -33,9 +36,5 @@
     "qa": "npm run lint && npm run test",
     "lint": "eslint .",
     "test": "nyc --reporter=text --reporter=html --reporter=lcov mocha test/specs"
-  },
-  "dependencies": {
-    "@babel/core": "7.6.4",
-    "@babel/preset-env": "7.6.3"
   }
 }
